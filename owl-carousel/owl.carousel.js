@@ -1151,23 +1151,26 @@ if (typeof Object.create !== "function") {
                 itemNumber = $item.data("owl-item");
                 $lazyImg = $item.find(".lazyOwl");
 
-                if (typeof $lazyImg.data("src") !== "string") {
-                    $item.data("owl-loaded", "loaded");
-                    continue;
-                }
-                if ($item.data("owl-loaded") === undefined) {
-                    $lazyImg.hide();
-                    $item.addClass("loading").data("owl-loaded", "checked");
-                }
-                if (base.options.lazyFollow === true) {
-                    follow = itemNumber >= base.currentItem;
-                } else {
-                    follow = true;
-                }
-                if (follow && itemNumber < base.currentItem + base.options.items && $lazyImg.length) {
-                    $lazyImg.each(function() {
-                        base.lazyPreload($item, $(this));
-                    });
+                var $lazyImgLen = $lazyImg.length;
+                var $i;
+
+                for ($i = 0; $i < $lazyImgLen; $i ++){
+                    if (typeof $lazyImg.eq($i).data("src") !== "string") {
+                        $item.data("owl-loaded", "loaded");
+                        continue;
+                    }
+                    if ($item.data("owl-loaded") === undefined) {
+                        $lazyImg.eq($i).hide();
+                        $item.addClass("loading").data("owl-loaded", "checked");
+                    }
+                    if (base.options.lazyFollow === true) {
+                        follow = itemNumber >= base.currentItem;
+                    } else {
+                        follow = true;
+                    }
+                    if (follow && itemNumber < base.currentItem + base.options.items && $lazyImg.length) {
+                        base.lazyPreload($item, $lazyImg.eq($i));
+                    }
                 }
             }
         },
